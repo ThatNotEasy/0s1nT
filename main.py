@@ -13,6 +13,7 @@ if __name__ == '__main__':
         socmed.threads = args.threads
         socmed.instagram_checker()
         socmed.facebook_checker()
+        socmed.tiktok_checker()
     except Exception as e:
         logger.error(f"Application failed: {str(e)}")
         sys.exit(1)

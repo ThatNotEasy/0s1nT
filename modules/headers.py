@@ -43,3 +43,22 @@ facebook_headers = {
     'viewport-width': '1920',
     # 'cookie': 'datr=rkw7aHAwTgSmA-IiZgoW-IVE; sb=I087aEYaqgR7w-EoSwW5JXkI; ps_l=1; ps_n=1; c_user=100091632258541; wd=1920x911; fr=1VfXGctIqWLsNbD2l.AWf1OUatuZBo3d4bxpElxxdLW7sHOtYGNrSt5ZAZ4EIY7ZYY0b8.BoYFut..AAA.0.0.BoYFut.AWenPsrrvmpsZiifIoWkPIDd9cY; xs=27%3ABfdeBmDAr6yOGQ%3A2%3A1748964033%3A-1%3A-1%3A%3AAcX6n2CuL3d-RulfxjwEnwCYeuzti-Nfy14opU7er74; presence=C%7B%22t3%22%3A%5B%5D%2C%22utc3%22%3A1751145483232%2C%22v%22%3A1%7D',
 }
+
+tiktok_headers = {
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'accept-language': 'en-US,en;q=0.9,ms;q=0.8,fr;q=0.7',
+    'cache-control': 'max-age=0',
+    'dnt': '1',
+    'priority': 'u=0, i',
+    'referer': 'https://www.tiktok.com/404?fromUrl=/ap1d.my_',
+    'sec-ch-ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'document',
+    'sec-fetch-mode': 'navigate',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-user': '?1',
+    'upgrade-insecure-requests': '1',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
+    # 'cookie': 'passport_csrf_token=b5680edd72b269d0451955c220fb4b3c; passport_csrf_token_default=b5680edd72b269d0451955c220fb4b3c; d_ticket=6df3b1dd2bdcf9393a2c8babe2ca6e6f82e12; passport_auth_status=bbfceeda631dfa22fb8d1b48133899c3%2C; passport_auth_status_ss=bbfceeda631dfa22fb8d1b48133899c3%2C; multi_sids=6962209515627512833%3A07d140246ce9b4cbdd7df2854db8e875; cmpl_token=AgQQAPO0F-RO0rCgUg1O4F048ltRH7zYP4U_YN9myw; uid_tt=ba1706ecf4c9026e01276e585cec20a5e7122820baacc58d43f9ac02b60bc662; uid_tt_ss=ba1706ecf4c9026e01276e585cec20a5e7122820baacc58d43f9ac02b60bc662; sid_tt=07d140246ce9b4cbdd7df2854db8e875; sessionid=07d140246ce9b4cbdd7df2854db8e875; sessionid_ss=07d140246ce9b4cbdd7df2854db8e875; store-idc=alisg; store-country-code=my; store-country-code-src=uid; tt-target-idc=alisg; tt-target-idc-sign=g6acNYL04-kcgfmmOMEuGlcFrp4ZyeXNQPlZzAwEApa0CanKMLU8mbbk7q_Mu90APAQmliazRvHYjrK6Kkzu0yp9kLRuQy8NQxub1PiB6SHED4PV3DKY5-dhdzTPC_7jm6fs3gOR12kDLxUpU5D145dqoz2uimVWL3jO-HMp47xfHvfpVqNK4WZmOjp_3BYESLqz0RAKgwZdFfTM9UjAE9gpstfTvp7rJhWnTfuwp8T23QRfQqRItppKYQEkcsNuj7t8QCN519fqqzV_8hvYxJWGaCt1yBA2KKqcsMK64hWHgMPbEhWt4UMUzTlRptz8I3RpiWjtkenHMSEiAW0tgPVzB3-cLay1XWa58cIhYc3_i5px0Ju1Hhp-COpF8WpVRi4UBi-IEKcicpLAi1VMJql6vVuK-uuwfXaNh6vQ9F1DjpvtCdIrQWA7eUKfXgklaN6Az6whV6FFPxYvB6jabpBhB_5QMDmGbAO2xKAekBnhqL1IKxgZsKK0kYGHxaoo; last_login_method=phone; tt_chain_token=OqRB1QSC3/RutzBxtDKerw==; delay_guest_mode_vid=3; sid_guard=07d140246ce9b4cbdd7df2854db8e875%7C1749784277%7C15551997%7CWed%2C+10-Dec-2025+03%3A11%3A14+GMT; sid_ucp_v1=1.0.0-KGFiNjFmYjNlOTZiYTY2ZTQ2Yjk5YWVlMjExMWVlZmYwZTJlMzNjZWMKGgiBiMq2rJWvz2AQ1a2uwgYYsws4AkDvB0gEEAMaA215MiIgMDdkMTQwMjQ2Y2U5YjRjYmRkN2RmMjg1NGRiOGU4NzU; ssid_ucp_v1=1.0.0-KGFiNjFmYjNlOTZiYTY2ZTQ2Yjk5YWVlMjExMWVlZmYwZTJlMzNjZWMKGgiBiMq2rJWvz2AQ1a2uwgYYsws4AkDvB0gEEAMaA215MiIgMDdkMTQwMjQ2Y2U5YjRjYmRkN2RmMjg1NGRiOGU4NzU; tiktok_webapp_theme=dark; odin_tt=dc0e808ae22dc6e26e4e45e11b453fa1d15284c226abfd673b2fc1b370ee62548e0c588b0e004ea1d89e11dc853c9818ace4031e461a45dbfd504917768bc889579f3e585074585b696a34c6fd7eeea6; _ttp=2ygez2AqbGymegkpTEY0xFULuuy; tt_csrf_token=oK1hU2yc-mz_0vHLur6TnCaZ8eaNFUyZhFBM; perf_feed_cache={%22expireTimestamp%22:1751331600000%2C%22itemIds%22:[%227520581668659350791%22%2C%227519835577550720264%22%2C%227519932037973806354%22]}; passport_fe_beating_status=true; tiktok_webapp_theme_source=auto; ttwid=1%7Ckv4rlaTWMwr8wGNIU8xKrg4oaKAx7sHS8ZK12QiNR0A%7C1751168814%7Cbfcb96fb49c36d14de8014a2069ab4fa765c9e960177ece87a26250a17aeef94; store-country-sign=MEIEDDYzGpJL2IR3hv8TGAQgrXzPFPo2pzd8jUkB9F5XdfIEGZB1Pw3DuGIjun4804AEEKMDKefXStkZdwwsrSv-PNs; msToken=K_Qb-akI-YKWsYDnUBXjqWf3RMz3HvTGn3HM4oqCoKsRNxx6WgkWcW9DJWBk6y3fxmPDNlbd4WJwJw3_XgXhi9-dZ1dFjWwBDcDA-zl3Q4NFUOFxlrVoK2gs52QnYFQwLaDrSxOUXecT09k=; msToken=2DPyGlNTnPfezZjgYW0lL2L2zXpSo3kg9nDy0Q50ZynlCg1PSAXZ9w9UTywPx1PUCF4ZTH8Vjq213Pa7NSzgJ-4nFjI0aZtydXWwmBLpDsajlzQ3QiIBUYvRb43f636VoLiDHnZ1ID1G30o=',
+}
