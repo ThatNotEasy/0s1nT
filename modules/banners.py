@@ -24,4 +24,4 @@ def banners():
     stdout.write(""+Fore.YELLOW   +"╔════════════════════════════════════════════════════════════════════════════╝\n")
     stdout.write(""+Fore.YELLOW   +"║ \x1b[38;2;255;20;147m• "+Fore.GREEN+"GITHUB             "+Fore.RED+"    |"+Fore.LIGHTWHITE_EX+"   GITHUB.COM/THATNOTEASY                        "+Fore.YELLOW+"║\n")
     stdout.write(""+Fore.YELLOW   +"╚════════════════════════════════════════════════════════════════════════════╝\n") 
-    print(f"{Fore.YELLOW}[OS1NT] - {Fore.GREEN}SOCIAL MEDI OSINT - {Fore.RED}[V0.1] \n{Fore.RESET}")
+    print(f"{Fore.YELLOW}[OS1NT] - {Fore.GREEN}SOCIAL MEDI OSINT - {Fore.RED}[V0.5] \n{Fore.RESET}")

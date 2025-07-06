@@ -1,4 +1,5 @@
 import requests, json, re
+from bs4 import BeautifulSoup
 from modules.logging import setup_logging
 from modules.headers import *
 from colorama import Fore, Style, init
@@ -27,41 +28,47 @@ class SOCMED:
         }
 
     def _print_result_box(self, platform, found, url, stats=None):
-        # Fix header typo and ensure consistent capitalization
         platform_name = platform.upper()
-        if platform_name == "TIKIOK":  # Fix typo in platform name
-            platform_name = "TIKTOK"
-            
-        print(f"\n{self.colors['border']}╔{'═'*46}╗")
-        print(f"║{self.colors['title']}{'SOCIAL MEDIA CHECKER':^46}{self.colors['border']}║")  # Fixed "SQLTAL" typo
-        print(f"║{self.colors['text']}{f'Platform: {platform_name}':^46}{self.colors['border']}║")
-        print(f"║{self.colors['text']}{f'Username: {self.input}':^46}{self.colors['border']}║")
-        print(f"║{self.colors['text']}{f'Started: {self.start_time}':^46}{self.colors['border']}║")
-        print(f"║{' '*46}║")
+        status_icon = f"{Fore.GREEN}✓" if found else f"{Fore.RED}✗"
+        status_text = f"{status_icon} {Fore.RESET}{platform_name}"
         
-        # Fix URL formatting (TikTok was missing / after domain)
+        # Format URL for display
         display_url = url.replace("tiktok.com@", "tiktok.com/@") if "tiktok.com@" in url else url
-        display_url = display_url if len(display_url) <= 40 else display_url[:37] + "..."
-        print(f"║ {self.colors['text']}URL: {self.colors['url']}{display_url.ljust(39)} {self.colors['border']}║")
         
-        # Status line with consistent spacing
-        status_color = self.colors['found'] if found else self.colors['not_found']
-        status_text = "FOUND" if found else "NOT FOUND"
-        print(f"║ {self.colors['text']}Status: {status_color}{status_text.ljust(36)} {self.colors['border']}║")
+        # Header with timestamp and status
+        header = f"{Fore.LIGHTBLACK_EX}{self.start_time} {status_text}"
         
-        # Stats section with fixed alignment
+        # Username line
+        username_line = f"{Fore.CYAN}@{self.input}"
+        
+        # URL line
+        url_line = f"{Fore.LIGHTBLUE_EX}{display_url}"
+        
+        # Box drawing
+        print(f"{Fore.LIGHTBLACK_EX}┌{'─' * 72}┐")
+        print(f"{Fore.LIGHTBLACK_EX}│ {header:<86}{Fore.LIGHTBLACK_EX}│")
+        print(f"{Fore.LIGHTBLACK_EX}├{'─' * 72}┤")
+        print(f"{Fore.LIGHTBLACK_EX}│ {username_line:<76}{Fore.LIGHTBLACK_EX}│")
+        print(f"{Fore.LIGHTBLACK_EX}│ {url_line:<76}{Fore.LIGHTBLACK_EX}│")
+        
+        # Stats section if available
         if found and stats:
-            print(f"║{' '*46}║")
+            print(f"{Fore.LIGHTBLACK_EX}├{'─' * 72}┤")
+            
+            max_key_length = max(len(str(key)) for key in stats.keys())
+            
             for key, value in stats.items():
-                # Fixed extra space in "Username :" and aligned properly
-                print(f"║ {self.colors['stats_key']}{key.title():<10}: "
-                      f"{self.colors['stats_value']}{str(value).ljust(32)} {self.colors['border']}║")
+                key_part = f"{Fore.LIGHTWHITE_EX}{key}:"
+                value_part = f"{Fore.LIGHTGREEN_EX}{value}"
+                stat_line = f"  {key_part:<{max_key_length + 2}}{value_part}"
+                print(f"{Fore.LIGHTBLACK_EX}│ {stat_line:<81}{Fore.LIGHTBLACK_EX}│")
         
-        print(f"╚{'═'*46}╝{Style.RESET_ALL}\n")
+        print(f"{Fore.LIGHTBLACK_EX}└{'─' * 72}┘{Style.RESET_ALL}")
+        print(".++" + "═" * 80 + "++.")
 
     def _save_result(self, data):
         if self.output:
-            with open(self.output, 'a') as f:
+            with open(self.output, 'a', encoding='utf-8') as f:
                 json.dump(data, f, indent=2)
                 f.write("\n")
 
@@ -73,31 +80,75 @@ class SOCMED:
             return
 
         try:
-            response = self.session.get(
-                f"https://www.instagram.com/{self.input}",
-                headers=instagram_headers
-            )
-            
-            title_start = response.text.find('<title>')
-            title_end = response.text.find('</title>')
-            
-            if title_start == -1 or title_end == -1:
-                data = {"platform": "instagram", "username": self.input, "found": False, "url": f"https://www.instagram.com/{self.input}"}
-                self._print_result_box("instagram", False, data['url'])
-            else:
-                title = response.text[title_start+7:title_end].strip()
-                
-                if (f"&#064;{self.input})" in title and "Instagram photos and videos" in title):
+            profile_url = f"https://www.instagram.com/{self.input}"
+            response = self.session.get(profile_url, headers=instagram_headers)
+
+            # Save raw HTML for debugging
+            with open("instagram.html", "w", encoding="utf-8") as f:
+                f.write(response.text)
+
+            soup = BeautifulSoup(response.text, 'html.parser')
+            og_desc = soup.find("meta", {"property": "og:description"})
+
+            if og_desc:
+                og_content = og_desc.get("content", "").strip()
+
+                # Check if it matches this profile
+                if f"@{self.input}" in og_content or f"&#064;{self.input}" in og_content:
+                    import re
+                    match = re.search(r"([\d,\.]+)\s+Followers,\s+([\d,\.]+)\s+Following,\s+([\d,\.]+)\s+Posts", og_content)
+                    if match:
+                        followers, following, posts = match.groups()
+                    else:
+                        followers = following = posts = "0"
+
+                    stats = {
+                        "Followers": followers,
+                        "Following": following,
+                        "Posts": posts
+                    }
+
                     data = {
                         "platform": "instagram",
                         "username": self.input,
                         "found": True,
-                        "url": f"https://www.instagram.com/{self.input}"
+                        "url": profile_url,
+                        "stats": stats
                     }
-                    self._print_result_box("instagram", True, data['url'])
+                    self._print_result_box("instagram", True, profile_url, stats)
+                    self._save_result(data)
+                    return  # Done, early return
+
+            # fallback to old title-based check
+            title_start = response.text.find('<title>')
+            title_end = response.text.find('</title>')
+
+            if title_start == -1 or title_end == -1:
+                data = {
+                    "platform": "instagram",
+                    "username": self.input,
+                    "found": False,
+                    "url": profile_url
+                }
+                self._print_result_box("instagram", False, profile_url)
+            else:
+                title = response.text[title_start + 7:title_end].strip()
+                if (f"@{self.input})" in title or f"&#064;{self.input})" in title) and "Instagram photos and videos" in title:
+                    data = {
+                        "platform": "instagram",
+                        "username": self.input,
+                        "found": True,
+                        "url": profile_url
+                    }
+                    self._print_result_box("instagram", True, profile_url)
                 else:
-                    data = {"platform": "instagram", "username": self.input, "found": False, "url": f"https://www.instagram.com/{self.input}"}
-                    self._print_result_box("instagram", False, data['url'])
+                    data = {
+                        "platform": "instagram",
+                        "username": self.input,
+                        "found": False,
+                        "url": profile_url
+                    }
+                    self._print_result_box("instagram", False, profile_url)
 
             self._save_result(data)
 
@@ -215,45 +266,165 @@ class SOCMED:
 
 # =============================================================== [TWITTER/X] =============================================================== #
 
-    def twitter_checker(self):
+    def x_checker(self):
+        if not self.input:
+            self.logger.error("No input specified")
+            return
+
+        try:
+            params = {
+                'variables': '{"screen_name":"hwnzri"}',
+                'features': '{"responsive_web_grok_bio_auto_translation_is_enabled":false,"hidden_profile_subscriptions_enabled":true,"payments_enabled":false,"profile_label_improvements_pcf_label_in_post_enabled":true,"rweb_tipjar_consumption_enabled":true,"verified_phone_label_enabled":false,"subscriptions_verification_info_is_identity_verified_enabled":true,"subscriptions_verification_info_verified_since_enabled":true,"highlights_tweets_tab_ui_enabled":true,"responsive_web_twitter_article_notes_tab_enabled":true,"subscriptions_feature_can_gift_premium":true,"creator_subscriptions_tweet_preview_api_enabled":true,"responsive_web_graphql_skip_user_profile_image_extensions_enabled":false,"responsive_web_graphql_timeline_navigation_enabled":true}',
+                'fieldToggles': '{"withAuxiliaryUserLabels":true}',
+            }
+            response = self.session.get('https://api.x.com/graphql/x3RLKWW1Tl7JgU7YtGxuzw/UserByScreenName',params=params,headers=x_headers)
+            if response.status_code == 200:
+                data = response.json()
+                username = data["data"]["user"]["result"]["core"]["screen_name"]
+                name = data["data"]["user"]["result"]["core"]["name"]
+                following = data["data"]["user"]["result"]["legacy"]["friends_count"]
+                follower = data["data"]["user"]["result"]["legacy"]["followers_count"]
+                
+                stats = {
+                    "Username": username + " (" + name + ")",
+                    "Followers": follower,
+                    "Following": following,
+                }
+
+                data = {
+                    "platform": "X",
+                    "username": self.input,
+                    "found": True,
+                    "url": f"https://x.com/{self.input}",
+                    "stats": stats
+                }
+                self._print_result_box("X", True, data['url'], stats)
+            else:
+                data = {
+                    "platform": "X",
+                    "username": self.input,
+                    "found": False,
+                    "url": f"https://x.com/{self.input}"
+                }
+                self._print_result_box("X", False, data['url'])
+            self._save_result(data)
+
+        except Exception as e:
+            self.logger.error(f"Error checking X: {str(e)}")
+            print(f"{Fore.RED}ERROR: {Fore.WHITE}Failed to check X account: @{self.input}")
+            
+# =============================================================== [TELEGRAM] =============================================================== #
+
+    def telegram_checker(self):
+        if not self.input:
+            self.logger.error("No input specified")
+            return
+
+        try:
+            response = self.session.get(f'https://telegram.me/{self.input}', headers=telegram_headers)
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            og_title_tag = soup.find('meta', {'property': 'og:title'})
+            og_description_tag = soup.find('meta', {'property': 'og:description'})
+            twitter_image_tag = soup.find('meta', {'property': 'twitter:image'})
+
+            og_title = og_title_tag['content'] if og_title_tag and 'content' in og_title_tag.attrs else None
+            og_description = og_description_tag['content'] if og_description_tag and 'content' in og_description_tag.attrs else None
+            twitter_image = twitter_image_tag['content'] if twitter_image_tag and 'content' in twitter_image_tag.attrs else None
+
+            if og_title and og_description and twitter_image:
+                stats = {
+                    "Name": og_title,
+                    "Desc": og_description,
+                    "Image": twitter_image
+                }
+                data = {
+                    "platform": "Telegram",
+                    "username": self.input,
+                    "found": True,
+                    "url": f"https://t.me/{self.input}",
+                    "stats": stats
+                }
+                self._print_result_box("Telegram", True, data['url'], stats)
+            else:
+                data = {
+                    "platform": "Telegram",
+                    "username": self.input,
+                    "found": False,
+                    "url": f"https://t.me/{self.input}"
+                }
+                self._print_result_box("Telegram", False, data['url'])
+
+            self._save_result(data)
+
+        except Exception as e:
+            self.logger.error(f"Error checking Telegram: {str(e)}")
+            print(f"{Fore.RED}ERROR: {Fore.WHITE}Failed to check Telegram account: @{self.input}")
+            
+# =============================================================== [LEMON8] =============================================================== #
+
+    def lemon8_checker(self):
         if not self.input:
             self.logger.error("No input specified")
             return
 
         try:
             response = self.session.get(
-                f"https://twitter.com/{self.input}",
-                headers=tiktok_headers
+                f"https://www.lemon8-app.com/@{self.input}",
+                headers=lemon8_headers,
+                allow_redirects=False
             )
-            
-            if response.status_code == 200 and "data-screenname" in response.text:
-                name_match = re.search(r'data-screenname="([^"]+)"', response.text)
-                display_name_match = re.search(r'data-name="([^"]+)"', response.text)
-                
+
+            soup = BeautifulSoup(response.text, 'html.parser')
+            profile_container = soup.find('div', class_='user-desc-main')
+
+            if response.status_code == 200 and profile_container:
+                display_name_tag = soup.find('h1', class_='user-desc-base-name')
+                display_name = display_name_tag.get_text(strip=True) if display_name_tag else "Unknown"
+
+                following = followers = likes_saves = "0"
+                stats_items = soup.find_all('a', class_='user-desc-main-info-item')
+
+                for item in stats_items:
+                    spans = item.find_all('span')
+                    if len(spans) >= 2:
+                        value = spans[0].get_text(strip=True)
+                        label = spans[1].get_text(strip=True).lower()
+
+                        if 'mengikuti' in label or 'following' in label:
+                            following = value
+                        elif 'pengikut' in label or 'followers' in label:
+                            followers = value
+                        elif 'suka dan simpanan' in label or 'likes and saves' in label:
+                            likes_saves = value
+
                 stats = {
-                    "Handle": f"@{name_match.group(1)}" if name_match else "@UNKNOWN",
-                    "Name": display_name_match.group(1) if display_name_match else "Unknown"
+                    "Name": display_name,
+                    "Following": following,
+                    "Followers": followers,
+                    "Likes/Saves": likes_saves
                 }
-                
+
                 data = {
-                    "platform": "twitter",
+                    "platform": "lemon8",
                     "username": self.input,
                     "found": True,
-                    "url": f"https://twitter.com/{self.input}",
+                    "url": f"https://www.lemon8-app.com/@{self.input}",
                     "stats": stats
                 }
-                self._print_result_box("twitter", True, data['url'], stats)
+
+                self._print_result_box("lemon8", True, data['url'], stats)
             else:
                 data = {
-                    "platform": "twitter",
+                    "platform": "lemon8",
                     "username": self.input,
                     "found": False,
-                    "url": f"https://twitter.com/{self.input}"
+                    "url": f"https://www.lemon8-app.com/@{self.input}"
                 }
-                self._print_result_box("twitter", False, data['url'])
+                self._print_result_box("lemon8", False, data['url'])
 
             self._save_result(data)
 
         except Exception as e:
-            self.logger.error(f"Error checking Twitter: {str(e)}")
-            print(f"{Fore.RED}ERROR: {Fore.WHITE}Failed to check Twitter account: @{self.input}")
+            self.logger.error(f"Error checking Lemon8: {str(e)}")
+            print(f"{Fore.RED}ERROR: {Fore.WHITE}Failed to check Lemon8 account: @{self.input}")
