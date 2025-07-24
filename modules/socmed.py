@@ -83,10 +83,6 @@ class SOCMED:
             profile_url = f"https://www.instagram.com/{self.input}"
             response = self.session.get(profile_url, headers=instagram_headers)
 
-            # Save raw HTML for debugging
-            with open("instagram.html", "w", encoding="utf-8") as f:
-                f.write(response.text)
-
             soup = BeautifulSoup(response.text, 'html.parser')
             og_desc = soup.find("meta", {"property": "og:description"})
 
@@ -428,3 +424,64 @@ class SOCMED:
         except Exception as e:
             self.logger.error(f"Error checking Lemon8: {str(e)}")
             print(f"{Fore.RED}ERROR: {Fore.WHITE}Failed to check Lemon8 account: @{self.input}")
+            
+            
+    def threads_checker(self):
+        if not self.input:
+            self.logger.error("No input specified")
+            return
+
+        url = f"https://www.threads.com/@{self.input}"
+        try:
+            resp = self.session.get(url, headers=threads_headers, allow_redirects=False)
+            resp.raise_for_status()
+            soup = BeautifulSoup(resp.text, 'html.parser')
+
+            profile = soup.find('div', class_='user-desc-main')
+            if profile:
+                title_tag = profile.find('h1', class_='user-desc-base-name')
+                title     = title_tag.get_text(strip=True) if title_tag else self.input
+                followers = (
+                    profile.find('span', attrs={'title': re.compile(r'^\d')})
+                    .get('title', '0')
+                )
+            else:
+                # twitter:description meta fallback
+                meta = soup.find('meta', attrs={'name': 'twitter:description'})
+                if meta and meta.has_attr('content'):
+                    desc = meta['content']
+                    m = re.search(r'(?P<followers>\d+)\s+Followers', desc, re.IGNORECASE)
+                    followers = m.group('followers') if m else "0"
+                else:
+                    span = soup.find('span', title=re.compile(r'^\d+'))
+                    sib  = span.find_next_sibling(string=re.compile(r'followers?', re.IGNORECASE)) if span else None
+                    if span and sib:
+                        followers = span['title']
+                    else:
+                        raise ValueError("Could not find followers count")
+
+                # page-title fallback
+                page_title = soup.find('title').get_text(strip=True)
+                title = re.split(r'\s*\(@', page_title, 1)[0]
+
+            # **STRIP ANY “ • …” SUFFIX FROM TITLE**
+            title = re.sub(r'\s*•.*$', '', title)
+
+            stats = {
+                "Title": title,
+                "Followers": followers,
+            }
+            data = {
+                "platform": "threads",
+                "username": self.input,
+                "found": True,
+                "url": url,
+                "stats": stats
+            }
+
+            self._print_result_box("threads", True, url, stats)
+            self._save_result(data)
+
+        except Exception as e:
+            self.logger.error(f"Error checking threads: {e}")
+            print(f"{Fore.RED}ERROR: {Fore.WHITE}Failed to check threads account: @{self.input}")

@@ -122,3 +122,27 @@ lemon8_headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
     'cookie': 'tt_webid=7523672462573340167',
 }
+
+threads_headers = {
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'accept-language': 'en-US,en;q=0.9,ms;q=0.8,fr;q=0.7',
+    'cache-control': 'max-age=0',
+    'dnt': '1',
+    'dpr': '1',
+    'priority': 'u=0, i',
+    'sec-ch-prefers-color-scheme': 'dark',
+    'sec-ch-ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"',
+    'sec-ch-ua-full-version-list': '"Not)A;Brand";v="8.0.0.0", "Chromium";v="138.0.7204.158", "Google Chrome";v="138.0.7204.158"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-model': '""',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-ch-ua-platform-version': '"19.0.0"',
+    'sec-fetch-dest': 'document',
+    'sec-fetch-mode': 'navigate',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-user': '?1',
+    'upgrade-insecure-requests': '1',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
+    'viewport-width': '1920',
+    # 'cookie': 'ig_did=432C4646-FF4C-43D5-A42F-0AC55453E643; csrftoken=vjHgYRtLJnIhHoozbJ4JqacrFkfqc4tg; ds_user_id=69378002728; mid=aDuOUAALAAFRC1icwu82QD_WKDc-; sessionid=69378002728%3AcyE3cx3n6ePNoy%3A3%3AAYe8NK2TB48GB6wuKyfrZmDnt7IEWw1xxGXay4DrPg',
+}
