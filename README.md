@@ -13,3 +13,4 @@ A work-in-progress OSINT (Open Source Intelligence) tool for collecting basic pu
 ✅ **Lemon8** - Profile existence verification  
 ✅ **TikTok** - Profile existence verification  
 ✅ **Threads** - Profile existence verification  
+✅ **SnapChat** - Profile existence verification  

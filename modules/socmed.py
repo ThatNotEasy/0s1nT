@@ -468,7 +468,7 @@ class SOCMED:
             title = re.sub(r'\s*•.*$', '', title)
 
             stats = {
-                "Title": title,
+                "Name": title,
                 "Followers": followers,
             }
             data = {
@@ -485,3 +485,34 @@ class SOCMED:
         except Exception as e:
             self.logger.error(f"Error checking threads: {e}")
             print(f"{Fore.RED}ERROR: {Fore.WHITE}Failed to check threads account: @{self.input}")
+            
+            
+    def snapchat_checker(self):
+        if not self.input:
+            self.logger.error("No input specified")
+            return
+
+        url = f"https://www.snapchat.com/@{self.input}"
+        try:
+            resp = self.session.get(url, headers=snapchat_headers, allow_redirects=False)
+            resp.raise_for_status()
+            soup = BeautifulSoup(resp.text, 'html.parser')
+            el = soup.select_one('span.UserDetailsCard_title__K9Awz.UserDetailsCard_oneLineTruncation__z0qou')
+            title = el.get_text(strip=True) if el else None
+            stats = {
+                "Name": title,
+            }
+            data = {
+                "platform": "snapchat",
+                "username": self.input,
+                "found": True,
+                "url": url,
+                "stats": stats
+            }
+
+            self._print_result_box("snapchat", True, url, stats)
+            self._save_result(data)
+
+        except Exception as e:
+            self.logger.error(f"Error checking snapchat: {e}")
+            print(f"{Fore.RED}ERROR: {Fore.WHITE}Failed to check snapchat account: @{self.input}")  

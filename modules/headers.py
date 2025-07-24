@@ -146,3 +146,23 @@ threads_headers = {
     'viewport-width': '1920',
     # 'cookie': 'ig_did=432C4646-FF4C-43D5-A42F-0AC55453E643; csrftoken=vjHgYRtLJnIhHoozbJ4JqacrFkfqc4tg; ds_user_id=69378002728; mid=aDuOUAALAAFRC1icwu82QD_WKDc-; sessionid=69378002728%3AcyE3cx3n6ePNoy%3A3%3AAYe8NK2TB48GB6wuKyfrZmDnt7IEWw1xxGXay4DrPg',
 }
+
+snapchat_headers = {
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'accept-language': 'en-US,en;q=0.9,ms;q=0.8,fr;q=0.7',
+    'cache-control': 'max-age=0',
+    'dnt': '1',
+    'if-none-match': '"wyibrnvxe93a9x"',
+    'priority': 'u=0, i',
+    'referer': 'https://www.snapchat.com/explore/ap1d.my',
+    'sec-ch-ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'document',
+    'sec-fetch-mode': 'navigate',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-user': '?1',
+    'upgrade-insecure-requests': '1',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
+    # 'cookie': 'EssentialSession=true; sc-wcid=c2f3e0b6-8ee6-4482-a7ba-59238a2c86f1; sc-language=en-US; _gid=GA1.2.2140936032.1753375594; blizzard_client_id=d3cb1ce5-f2cc-4005-bbe6-943b750227df:1753375599960; _sc-sid=ace58c4d-a5ca-4cbe-a76c-63f5e9716e57; blizzard_web_session_id=qPCiKXGg8Jzpdq0v; sc-cookies-accepted=true; Preferences=true; Performance=true; Marketing=true; _scid=rV4plV4gfbOAj_GNduGKrbRj5RWYKuMi; _ScCbts=%5B%5D; sc_at=v2|H4sIAAAAAAAAAE3GwREAEAwEwIoyE+4i6AahCsX72tfSct7tFBnQLVzTpAaWIDhaFD+ccRO1Jzeggub3qz62b+IoQAAAAA==; _sctr=1%7C1753372800000; _scid_r=uN4plV4gfbOAj_GNduGKrbRj5RWYKuMiMdmX7g; _gat=1; _ga=GA1.1.1895669924.1753375594; _ga_DPDHJB4310=GS2.1.s1753383279$o2$g1$t1753383518$j40$l0$h0',
+}
