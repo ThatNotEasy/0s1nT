@@ -8,3 +8,8 @@ A work-in-progress OSINT (Open Source Intelligence) tool for collecting basic pu
 
 ✅ **Instagram** - Profile existence verification  
 ✅ **Facebook** - Profile existence verification  
+✅ **X** - Profile existence verification  
+✅ **Telegram** - Profile existence verification  
+✅ **Lemon8** - Profile existence verification  
+✅ **TikTok** - Profile existence verification  
+✅ **Threads** - Profile existence verification  
